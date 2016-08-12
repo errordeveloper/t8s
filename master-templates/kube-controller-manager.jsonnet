@@ -30,7 +30,6 @@ function(cfg)
               "controller-manager",
               "--master=127.0.0.1:8080",
               "--cluster-name=" + cfg.phase1.cluster_name,
-              //"--cloud-provider=%s" % cfg.phase1.cloud_provider,
               "--root-ca-file=/etc/kubernetes/test-pki/ca.pem",
               "--service-account-private-key-file=/etc/kubernetes/test-pki/apiserver-key.pem",
               "--cluster-signing-cert-file=/etc/kubernetes/test-pki/ca.pem",

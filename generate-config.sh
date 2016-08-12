@@ -3,6 +3,8 @@
 ROLE="${1}"
 VERSION_TAG="${2}"
 
+kubelet_token="d661098e78bda3d67a74f1012c035f3cbba865eb"
+
 mkdir -p "/opt/cni" "/etc/cni"
 ln -s "/etc/kubernetes/cni/bin" "/opt/cni/bin"
 ln -s "/etc/kubernetes/cni/net.d" "/etc/cni/"
@@ -18,12 +20,12 @@ kubectl config set-credentials admin \
 kubectl config set-context test-cluster \
   --cluster="secure-testing" \
   --user="admin"
-
 kubectl config use-context test-cluster
 
 case "${ROLE}" in
   "master")
     mkdir -p "/etc/kubernetes/manifests"
+    echo "${kubelet_token},kubelet,kubelet" > "/etc/kubernetes/tokens"
     jq -n "{}
       | .phase1.cloud_provider=\"fake\"
       | .phase1.cluster_name=\"kubernetes\"
@@ -42,8 +44,11 @@ case "${ROLE}" in
       --server="https://10.99.0.254:443" \
       --certificate-authority="/etc/kubernetes/test-pki/ca.pem" \
       --embed-certs
+    kubectl config --kubeconfig="/etc/kubernetes/kubelet.conf" set-credentials kubelet \
+      --token="${kubelet_token}"
     kubectl config --kubeconfig="/etc/kubernetes/kubelet.conf" set-context test-cluster \
-      --cluster="secure-testing"
+      --cluster="secure-testing" \
+      --user="kubelet"
     kubectl config --kubeconfig="/etc/kubernetes/kubelet.conf" use-context test-cluster
     ;;
 esac
