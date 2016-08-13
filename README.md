@@ -17,6 +17,7 @@ Check `t8s` out *inside* a working directory of `git@github.com:kubernetes/kuber
 $ cd Projects/kubernetes
 $ git clone git@github.com:errordeveloper/t8s
 $ cd t8s
+$ make rebuild
 $ make
 $ DOCKER_MACHINE_DRIVER=virtualbox ./create-nodes.sh
 $ ./deploy-to-nodes.sh
@@ -32,7 +33,7 @@ When you make a code change to e.g. kubelet or api server and want to deploy it 
 
 ```
 ^C
-$ ./quick-build.sh # or should this be make rebuild? what's the difference?
+$ make rebuild
 $ ./master.sh
 ```
 
@@ -42,4 +43,7 @@ To deploy changes to the nodes, which are running in the docker-machine VMs, the
 $ ./deploy-to-nodes.sh
 ```
 
-??? how do you actually run the kubelet on the nodes ???
+To start up a node in the docker-machine VM, run:
+```
+$ ./node.sh
+```
