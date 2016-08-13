@@ -1,0 +1,25 @@
+{
+  "CN": "Kubernetes",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "GB",
+      "L": "London",
+      "O": "Weaveworks Ltd.",
+      "OU": "CA"
+    }
+  ],
+  "hosts": [
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster.local",
+    "moby",
+    "10.16.0.1",
+    "10.99.0.254",
+    "127.0.0.1"
+  ]
+}
