@@ -17,4 +17,4 @@ exec docker "${conf[@]}" run --tty --interactive \
     "errordeveloper/hyperquick:node-$(version_tag)" \
       --kubeconfig="/etc/kubernetes/kubelet.conf" \
       --wait-for-kubeconfig=true \
-      --request-tls-cert=true --cert-dir=/tmp --v=9
+      --request-tls-cert=true --cert-dir=/tmp

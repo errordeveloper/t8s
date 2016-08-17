@@ -13,6 +13,11 @@ for n in "${nodes[@]}" ; do
   weave connect "$(docker-machine ip "${n}")"
 done
 
+docker run --tty --interactive \
+  --volume=/etc:/etc:rw \
+  "errordeveloper/hyperquick:base" \
+    bash -c 'rm -vrf "/etc/kubernetes-pki" ; mkdir -p "/etc/kubernetes-pki" ; true'
+
 exec docker run --tty --interactive \
   --net=host --pid=host --privileged=true \
   --volume=/var/run/docker.sock:/var/run/docker.sock:rw \
@@ -20,7 +25,9 @@ exec docker run --tty --interactive \
   --volume=/dev:/dev \
   --volume=/sys:/sys:ro \
   --volume=/var/run:/var/run:rw \
+  --volume=/etc/kubernetes-pki:/etc/kubernetes/pki:rw \
   --volume=/run:/run:rw \
   "errordeveloper/hyperquick:master-$(version_tag)" \
-      --api-servers=http://127.0.0.1:8080 \
+      --kubeconfig="/etc/kubernetes/kubelet.conf" \
+      --wait-for-kubeconfig=true \
       --config=/etc/kubernetes/manifests "$@"

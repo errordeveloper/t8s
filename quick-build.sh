@@ -29,6 +29,6 @@ source "build/common.sh"
 
 kube::build::verify_prereqs
 kube::build::build_image
-kube::build::run_build_command make WHAT="cmd/kubectl cmd/hyperkube"
+kube::build::run_build_command make WHAT="cmd/kubectl cmd/hyperkube cmd/kubeadm"
 kube::build::copy_output
 kube::release::package_hyperkube

@@ -33,11 +33,11 @@ function(cfg)
               "--cloud-provider=%s" % cfg.phase1.cloud_provider,
               "--admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,ResourceQuota",
               "--service-cluster-ip-range=%s" % cfg.phase2.service_cluster_ip_range,
-              "--service-account-key-file=/etc/kubernetes/test-pki/apiserver-key.pem",
-              "--client-ca-file=/etc/kubernetes/test-pki/ca.pem",
-              "--tls-cert-file=/etc/kubernetes/test-pki/apiserver.pem",
-              "--tls-private-key-file=/etc/kubernetes/test-pki/apiserver-key.pem",
-              "--token-auth-file=/etc/kubernetes/tokens",
+              "--service-account-key-file=/etc/kubernetes/pki/apiserver-key.pem",
+              "--client-ca-file=/etc/kubernetes/pki/ca.pem",
+              "--tls-cert-file=/etc/kubernetes/pki/apiserver.pem",
+              "--tls-private-key-file=/etc/kubernetes/pki/apiserver-key.pem",
+              //"--token-auth-file=/etc/kubernetes/tokens",
               "--secure-port=443",
               "--allow-privileged",
               "--v=4",
@@ -73,12 +73,12 @@ function(cfg)
               mountPath: "/srv/kubernetes",
               readOnly: true,
             },
+            */
             {
-              name: "etckube",
-              mountPath: "/etc/kubernetes",
+              name: "etckubepki",
+              mountPath: "/etc/kubernetes/pki",
               readOnly: true,
             },
-            */
             {
               name: "etcssl",
               mountPath: "/etc/ssl",
@@ -95,13 +95,13 @@ function(cfg)
             path: "/srv/kubernetes",
           },
         },
+        */
         {
-          name: "etckube",
+          name: "etckubepki",
           hostPath: {
-            path: "/etc/kubernetes",
+            path: "/etc/kubernetes-pki",
           },
         },
-        */
         {
           name: "etcssl",
           hostPath: {

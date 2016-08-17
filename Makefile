@@ -29,7 +29,7 @@ images: binaries
 		&& docker tag "errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "hyperquick:$${role}" \
 		&& docker images "hyperquick:$${role}" ; \
 	done
-	@rm -f hyperkube kubectl
+	@rm -f hyperkube kubectl kubeadm
 
 rebuild:
 	@(export KUBE_ROOT=$(KUBE_ROOT) ; $(MAKE) -C $(KUBE_ROOT) clean ; ./quick-build.sh)
@@ -37,6 +37,7 @@ rebuild:
 binaries:
 	@cp "$(BUILD)/hyperkube" "./"
 	@cp "$(BUILD)/kubectl" "./"
+	@cp "$(BUILD)/kubeadm" "./"
 
 clean:
 	@docker ps -a | awk '$$2 !~ /weaveworks/ && $$1 !~ /^CONTAINER$$/ { print $$1 }' | xargs docker rm -f -v

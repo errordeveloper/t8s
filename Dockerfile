@@ -19,7 +19,7 @@ ARG VERSION_TAG
 
 ADD . /etc/kubernetes
 
-RUN ln /etc/kubernetes/hyperkube /hyperkube && ln /etc/kubernetes/kubectl /usr/bin/kubectl
+RUN ln /etc/kubernetes/hyperkube /hyperkube && ln /etc/kubernetes/kubectl /usr/bin/kubectl && ln /etc/kubernetes/kubeadm /usr/bin/kubeadm
 
 RUN /etc/kubernetes/generate-config.sh $ROLE $VERSION_TAG
 

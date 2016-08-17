@@ -30,10 +30,10 @@ function(cfg)
               "controller-manager",
               "--master=127.0.0.1:8080",
               "--cluster-name=" + cfg.phase1.cluster_name,
-              "--root-ca-file=/etc/kubernetes/test-pki/ca.pem",
-              "--service-account-private-key-file=/etc/kubernetes/test-pki/apiserver-key.pem",
-              "--cluster-signing-cert-file=/etc/kubernetes/test-pki/ca.pem",
-              "--cluster-signing-key-file=/etc/kubernetes/test-pki/ca-key.pem",
+              "--root-ca-file=/etc/kubernetes/pki/ca.pem",
+              "--service-account-private-key-file=/etc/kubernetes/pki/apiserver-key.pem",
+              "--cluster-signing-cert-file=/etc/kubernetes/pki/ca.pem",
+              "--cluster-signing-key-file=/etc/kubernetes/pki/ca-key.pem",
               "--insecure-approve-all-csrs=true",
               "--v=9",
             ],
@@ -56,12 +56,12 @@ function(cfg)
               mountPath: "/srv/kubernetes",
               readOnly: true,
             },
+            */
             {
-              name: "etckube",
+              name: "etckubepki",
               mountPath: "/etc/kubernetes",
               readOnly: true,
             },
-            */
             {
               name: "etcssl",
               mountPath: "/etc/ssl",
@@ -78,13 +78,13 @@ function(cfg)
             path: "/srv/kubernetes",
           },
         },
+        */
         {
-          name: "etckube",
+          name: "etckubepki",
           hostPath: {
-            path: "/etc/kubernetes",
+            path: "/etc/kubernetes-pki",
           },
         },
-        */
         {
           name: "etcssl",
           hostPath: {
