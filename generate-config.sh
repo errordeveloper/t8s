@@ -24,6 +24,8 @@ ln -s "/etc/kubernetes/cni/net.d" "/etc/cni/"
 
 case "${ROLE}" in
   "master")
+    mkdir -p "/root/.kube"
+    ln -s -f "/etc/kubernetes/admin.conf" "/root/.kube/config"
     #mkdir -p "/etc/kubernetes/manifests"
     #echo "${kubelet_token},kubelet,kubelet" > "/etc/kubernetes/tokens"
     #jq -n "{}
