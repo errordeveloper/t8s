@@ -18,7 +18,7 @@ docker run --tty --interactive \
   "errordeveloper/hyperquick:base" \
     bash -c 'rm -vrf "/etc/kubernetes-pki" ; mkdir -p "/etc/kubernetes-pki" ; true'
 
-exec docker run --tty --interactive \
+exec docker run --tty --interactive --rm --name=kubelet \
   --net=host --pid=host --privileged=true \
   --volume=/var/run/docker.sock:/var/run/docker.sock:rw \
   --volume=/var/lib/docker:/var/lib/docker:rw \
