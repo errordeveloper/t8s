@@ -13,10 +13,17 @@ for n in "${nodes[@]}" ; do
   weave connect "$(docker-machine ip "${n}")"
 done
 
-docker run --tty --interactive \
-  --volume=/etc:/etc:rw \
-  "errordeveloper/hyperquick:base" \
-    bash -c 'rm -vrf "/etc/kubernetes-pki" ; mkdir -p "/etc/kubernetes-pki" ; true'
+# PKI assets are located inside of the container, for this test
+# to work we need to copy those into the host, so API server and
+# KCM pods can mount them
+docker run --rm \
+  --volume=/etc:/host-etc:rw \
+  --entrypoint=/bin/bash \
+    "errordeveloper/hyperquick:master-$(version_tag)" \
+      -c "
+        rm -vrf /host-etc/kubernetes-pki ;
+        cp -va /etc/kubernetes/pki /host-etc/kubernetes-pki ;
+      "
 
 exec docker run --tty --interactive --rm --name=kubelet \
   --net=host --pid=host --privileged=true \
