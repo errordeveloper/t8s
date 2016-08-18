@@ -16,19 +16,20 @@
 
 # Build a Kubernetes release.  This will build the binaries, create the Docker
 # images and other build artifacts.
-# For pushing these artifacts publicly on Google Cloud Storage, see the 
+# For pushing these artifacts publicly on Google Cloud Storage, see the
 # associated build/push-* scripts.
 
 set -o errexit
 set -o nounset
 set -o pipefail
 
+WHAT="${WHAT:-cmd/kubectl cmd/hyperkube cmd/kubeadm}"
 KUBE_ROOT="${KUBE_ROOT:-../}"
 cd "${KUBE_ROOT}"
 source "build/common.sh"
 
 kube::build::verify_prereqs
 kube::build::build_image
-kube::build::run_build_command make WHAT="cmd/kubectl cmd/hyperkube cmd/kubeadm"
+kube::build::run_build_command make WHAT="$WHAT"
 kube::build::copy_output
 kube::release::package_hyperkube
