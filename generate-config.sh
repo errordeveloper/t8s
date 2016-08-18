@@ -16,5 +16,6 @@ case "${ROLE}" in
     ;;
   "node")
     rm -rf "/etc/kubernetes/manifests"
+    rm -rf "/etc/kubernetes/pki"
     ;;
 esac
