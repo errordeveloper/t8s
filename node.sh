@@ -15,6 +15,4 @@ exec docker "${conf[@]}" run --tty --interactive \
   --volume=/var/run:/var/run:rw \
   --volume=/run:/run:rw \
     "errordeveloper/hyperquick:node-$(version_tag)" \
-      --kubeconfig="/etc/kubernetes/kubelet.conf" \
-      --wait-for-kubeconfig=true \
-      --request-tls-cert=true --cert-dir=/tmp
+      --wait-for-kubeconfig=true

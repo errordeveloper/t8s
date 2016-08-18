@@ -35,6 +35,5 @@ exec docker run --tty --interactive --rm --name=kubelet \
   --volume=/etc/kubernetes-pki:/etc/kubernetes/pki:rw \
   --volume=/run:/run:rw \
   "errordeveloper/hyperquick:master-$(version_tag)" \
-      --kubeconfig="/etc/kubernetes/kubelet.conf" \
-      --wait-for-kubeconfig=true \
-      --config=/etc/kubernetes/manifests "$@"
+     --wait-for-kubeconfig=true \
+       "$@"

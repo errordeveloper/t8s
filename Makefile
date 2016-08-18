@@ -23,8 +23,10 @@ BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 .PHONY: binaries images build_hyperkube clean
 
 images: binaries
-	@for role in node master ; do \
-		docker build --build-arg="ROLE=$${role}" --build-arg="VERSION_TAG=$(VERSION_TAG)" --tag="errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "./" \
+	@docker build --build-arg="VERSION_TAG=$(VERSION_TAG)" --tag="errordeveloper/hyperquick:master-$(VERSION_TAG)" "./"
+	@printf "FROM errordeveloper/hyperquick:master-$(VERSION_TAG)\nRUN rm -rf /etc/kubernetes/manifests /etc/kubernetes/pki" \
+		| docker build --tag="errordeveloper/hyperquick:node-$(VERSION_TAG)" -
+	@for role in node master ; do echo "Tagging lates $${role} image" \
 		&& docker tag "errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "errordeveloper/hyperquick:$${role}" \
 		&& docker tag "errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "hyperquick:$${role}" \
 		&& docker images "hyperquick:$${role}" ; \
