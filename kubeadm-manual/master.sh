@@ -24,7 +24,7 @@ docker run --rm \
     "errordeveloper/hyperquick:master-$(version_tag)" \
       -c "
         rm -vrf /host-etc/kubernetes-pki ;
-        cp -va /etc/kubernetes/pki /host-etc/kubernetes-pki ;
+        cp -va /etc/kubernetes-pki /host-etc/kubernetes-pki ;
       "
 
 exec docker run --tty --interactive --rm --name=kubelet \
