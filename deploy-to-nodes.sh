@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 nodes=($(docker-machine ls -q | grep hyperquick))
 
 version_tag() {
