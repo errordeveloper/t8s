@@ -1,7 +1,9 @@
 #!/bin/bash -ex
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 version_tag() {
-  if [ ! "${VERSION_TAG+x}" = "x" ] ; then git --git-dir "${KUBE_ROOT:-../}/.git" describe; fi
+  if [ ! "${VERSION_TAG+x}" = "x" ] ; then git --git-dir "${KUBE_ROOT:-../../}/.git" describe; fi
 }
 
 conf=($(docker-machine config "hyperquick-${1:-"1"}"))
@@ -16,5 +18,4 @@ exec docker "${conf[@]}" run --tty --interactive \
   --volume=/run:/run:rw \
     "errordeveloper/hyperquick:node-$(version_tag)" \
       --kubeconfig="/etc/kubernetes/kubelet.conf" \
-      --wait-for-kubeconfig=true \
-      --request-tls-cert=true --cert-dir=/tmp
+      --require-kubeconfig

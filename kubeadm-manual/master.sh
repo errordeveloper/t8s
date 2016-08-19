@@ -1,10 +1,12 @@
 #!/bin/bash -ex
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 weave launch-router || true
 weave expose 10.99.0.254/24 || true
 
 version_tag() {
-  if [ ! "${VERSION_TAG+x}" = "x" ] ; then git --git-dir "${KUBE_ROOT:-../}/.git" describe; fi
+  if [ ! "${VERSION_TAG+x}" = "x" ] ; then git --git-dir "${KUBE_ROOT:-../../}/.git" describe; fi
 }
 
 nodes=($(docker-machine ls -q | grep hyperquick))
@@ -35,5 +37,5 @@ exec docker run --tty --interactive --rm --name=kubelet \
   --volume=/etc/kubernetes-pki:/etc/kubernetes/pki:rw \
   --volume=/run:/run:rw \
   "errordeveloper/hyperquick:master-$(version_tag)" \
-     --wait-for-kubeconfig=true \
+     --require-kubeconfig=true \
        "$@"

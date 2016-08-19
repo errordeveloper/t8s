@@ -14,13 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-KUBE_ROOT ?= ../../
+KUBE_ROOT := ../../
 
 VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git describe)
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
-.PHONY: binaries images build_hyperkube clean
+.PHONY: binaries images clean rebuild
+
+default: images
+
+clean rebuild:
+	$(MAKE) -C .. $@
 
 images: binaries
 	@for role in node master ; do \
@@ -32,20 +37,13 @@ images: binaries
 		&& docker tag "errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "hyperquick:$${role}" \
 		&& docker images "hyperquick:$${role}" ; \
 	done
-	@rm -f hyperkube kubectl kubeadm
-
-rebuild:
-	@(export KUBE_ROOT=$(KUBE_ROOT) ; $(MAKE) -C $(KUBE_ROOT) clean ; ./quick-build.sh)
+	@rm -f hyperkube kubectl
+	@rm -rf cni
 
 binaries:
+	@cp -a "../cni" "./"
 	@cp "$(BUILD)/hyperkube" "./"
 	@cp "$(BUILD)/kubectl" "./"
-	@cp "$(BUILD)/kubeadm" "./"
-
-clean:
-	@docker ps -a | awk '$$2 !~ /weaveworks/ && $$1 !~ /^CONTAINER$$/ { print $$1 }' | xargs docker rm -f -v
-	@docker images | awk '$$1 ~ /none/ { print $$3 }' | xargs docker rmi -f
-	@docker images | awk '$$1 ~ /hyperquick$$/ && $$2 ~ /^(node|master)-v/ { print $$3 }' | xargs docker rmi -f
 
 test-pki/ca-config.json:
 	@jq -n "{} \
