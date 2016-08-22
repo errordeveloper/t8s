@@ -31,7 +31,7 @@ images: binaries
 	@docker build \
 	  --build-arg="VERSION_TAG=$(VERSION_TAG)" \
 	  --tag="errordeveloper/hyperquick:master-$(VERSION_TAG)" "./"
-	@printf "FROM errordeveloper/hyperquick:master-$(VERSION_TAG)\nRUN rm -rf /etc/kubernetes/manifests /etc/kubernetes/pki && mkdir -p /etc/kubernetes/manifests" \
+	@printf "FROM errordeveloper/hyperquick:master-$(VERSION_TAG)\nRUN /etc/kubernetes/modify-node-config.sh" \
 		| docker build --tag="errordeveloper/hyperquick:node-$(VERSION_TAG)" -
 	@for role in node master ; do echo "Tagging latest $${role} image" \
 		&& docker tag "errordeveloper/hyperquick:$${role}-$(VERSION_TAG)" "errordeveloper/hyperquick:$${role}" \

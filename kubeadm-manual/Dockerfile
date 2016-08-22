@@ -18,8 +18,6 @@ ARG VERSION_TAG
 
 ADD . /etc/kubernetes
 
-RUN ln /etc/kubernetes/hyperkube /hyperkube && ln /etc/kubernetes/kubectl /usr/bin/kubectl && ln /etc/kubernetes/kubeadm /usr/bin/kubeadm
-
 RUN /etc/kubernetes/generate-master-config.sh $VERSION_TAG
 
-ENTRYPOINT [ "/hyperkube", "kubelet", "--network-plugin=cni", "--network-plugin-dir=/etc/cni/net.d", "--kubeconfig=/etc/kubernetes/kubelet.conf", "--config=/etc/kubernetes/manifests" ]
+ENTRYPOINT [ "/hyperkube", "kubelet", "--network-plugin=cni", "--network-plugin-dir=/etc/cni/net.d", "--kubeconfig=/etc/kubernetes/kubelet.conf", "--require-kubeconfig=true", "--pod-manifest-path=/etc/kubernetes/manifests" ]

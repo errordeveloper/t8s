@@ -8,6 +8,11 @@ version_tag() {
 
 conf=($(docker-machine config "hyperquick-${1:-"1"}"))
 
+image="errordeveloper/hyperquick:node-$(version_tag)"
+
+kubeadm="kubeadm manual bootstrap join-node --ca-cert-file=/etc/kubernetes/ca.pem --token=\$(cat /etc/kubernetes/bootsrap-token) --api-server-urls https://10.99.0.254:443"
+kubelet="$(docker inspect -f '{{range .Config.Entrypoint}}{{.}} {{end}}' "${image}")"
+
 exec docker "${conf[@]}" run --tty --interactive \
   --net=host --pid=host --privileged=true \
   --volume=/var/run/docker.sock:/var/run/docker.sock:rw \
@@ -16,5 +21,6 @@ exec docker "${conf[@]}" run --tty --interactive \
   --volume=/sys:/sys:ro \
   --volume=/var/run:/var/run:rw \
   --volume=/run:/run:rw \
-    "errordeveloper/hyperquick:node-$(version_tag)" \
-      --require-kubeconfig=true
+  --entrypoint=/bin/bash \
+    "${image}" \
+      -c "${kubeadm} && ${kubelet}"
