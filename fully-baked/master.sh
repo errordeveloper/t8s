@@ -9,7 +9,7 @@ version_tag() {
   if [ ! "${VERSION_TAG+x}" = "x" ] ; then git --git-dir "${KUBE_ROOT:-../../}/.git" describe; fi
 }
 
-nodes=($(docker-machine ls -q | grep hyperquick))
+nodes=($(docker-machine ls -q | grep hyperquick || true))
 
 for n in "${nodes[@]}" ; do
   weave connect "$(docker-machine ip "${n}")"
