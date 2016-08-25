@@ -30,9 +30,9 @@ rebuild:
 	@(export KUBE_ROOT=$(KUBE_ROOT) ; $(MAKE) -C $(KUBE_ROOT) clean ; ./quick-build.sh $(WHAT))
 
 clean:
-	-@docker ps -a | awk '$$2 !~ /weaveworks/ && $$1 !~ /^CONTAINER$$/ { print $$1 }' | xargs docker rm -f -v
-	-@docker images | awk '$$1 ~ /none/ { print $$3 }' | xargs docker rmi -f
-	-@docker images | awk '$$1 ~ /hyperquick$$/ && $$2 ~ /^(node|master)-v/ { print $$3 }' | xargs docker rmi -f
+	-@docker ps -a | awk '$$2 !~ /weaveworks/ && $$1 !~ /^CONTAINER$$/ { print $$1 }' | xargs docker rm -f -v 2>/nev/null
+	-@docker images | awk '$$1 ~ /none/ { print $$3 }' | xargs docker rmi -f 2>/dev/null
+	-@docker images | awk '$$1 ~ /hyperquick$$/ && $$2 ~ /^(node|master)-v/ { print $$3 }' | xargs docker rmi -f 2> /dev/null
 
 base:
 	@docker build -t errordeveloper/hyperquick:$@ $@ && docker push errordeveloper/hyperquick:$@
