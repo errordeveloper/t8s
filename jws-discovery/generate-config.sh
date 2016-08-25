@@ -10,6 +10,8 @@ mkdir -vp "/opt/cni" "/etc/cni"
 ln -vs "/etc/kubernetes/cni/bin" "/opt/cni/bin"
 ln -vs "/etc/kubernetes/cni/net.d" "/etc/cni/"
 
+mkdir -vp "/etc/kubernetes/manifests"
+
 # TODO: we should also provide this for the user
 mkdir -vp "/root/.kube"
 ln -vsf "/etc/kubernetes/admin.conf" "/root/.kube/config"
