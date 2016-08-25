@@ -20,12 +20,13 @@ VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git describe)
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
+
 .PHONY: binaries images clean rebuild
 
 default: images
 
 clean rebuild:
-	$(MAKE) -C .. $@
+	$(MAKE) -C .. $@ WHAT="cmd/kubectl cmd/hyperkube cmd/kubeadm cmd/kubediscovery"
 
 images: binaries
 	@docker build \
@@ -39,7 +40,7 @@ images: binaries
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "errordeveloper/hyperquick:node" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "hyperquick:node" \
 		&& docker images "hyperquick:node" ;
-	@rm -f hyperkube kubectl kubeadm
+	@rm -f hyperkube kubectl kubeadm kubediscovery
 	@rm -rf cni
 
 binaries:
@@ -47,3 +48,4 @@ binaries:
 	@cp "$(BUILD)/hyperkube" "./"
 	@cp "$(BUILD)/kubectl" "./"
 	@cp "$(BUILD)/kubeadm" "./"
+	@cp "$(BUILD)/kubediscovery" "./"

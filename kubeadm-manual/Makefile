@@ -20,6 +20,8 @@ VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git describe)
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
+CMDS := cmd/kubectl cmd/hyperkube cmd/kubeadm
+
 .PHONY: binaries images clean rebuild
 
 default: images

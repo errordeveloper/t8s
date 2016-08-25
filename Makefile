@@ -27,7 +27,7 @@ defailt:
 	@for mk in */Makefile ; do echo "- $${mk}" ; done
 
 rebuild:
-	@(export KUBE_ROOT=$(KUBE_ROOT) ; $(MAKE) -C $(KUBE_ROOT) clean ; ./quick-build.sh)
+	@(export KUBE_ROOT=$(KUBE_ROOT) ; $(MAKE) -C $(KUBE_ROOT) clean ; ./quick-build.sh $(WHAT))
 
 clean:
 	-@docker ps -a | awk '$$2 !~ /weaveworks/ && $$1 !~ /^CONTAINER$$/ { print $$1 }' | xargs docker rm -f -v
