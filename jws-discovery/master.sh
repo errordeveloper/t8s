@@ -25,9 +25,15 @@ docker rm -f kubeadm kubelet || true
 
 docker run --rm \
   --volume=/etc:/host-etc:rw \
+  --pid=host --privileged=true \
   --entrypoint=/bin/bash \
     "${image}" \
       -c "
+        umount -v /var/lib/kubelet;
+        rm -rfv /var/lib/kubelet;
+        mkdir -pv /var/lib/kubelet;
+        nsenter --mount=/proc/1/ns/mnt -- mount -v --bind /var/lib/kubelet /var/lib/kubelet;
+        nsenter --mount=/proc/1/ns/mnt -- mount -v --make-rshared /var/lib/kubelet;
         rm -rfv /host-etc/kubernetes;
         cp -av /etc/kubernetes /host-etc/kubernetes;
       "
@@ -50,6 +56,7 @@ docker run --rm --tty --interactive \
   --volume=/dev:/dev \
   --volume=/sys:/sys:ro \
   --volume=/var/run:/var/run:rw \
+  --volume=/var/lib/kubelet:/var/lib/kubelet:rw,rshared \
   --volume=/etc/kubernetes:/etc/kubernetes:rw \
   --volume=/run:/run:rw \
   --entrypoint=/bin/bash \
