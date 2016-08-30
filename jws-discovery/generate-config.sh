@@ -16,5 +16,3 @@ mkdir -vp "/etc/kubernetes/manifests"
 # TODO: we should also provide this for the user
 mkdir -vp "/root/.kube"
 ln -vsf "/etc/kubernetes/admin.conf" "/root/.kube/config"
-
-( date ; env ; ) | openssl sha1 | cut -d " "  -f "2" > "/etc/kubernetes/bootsrap-token"

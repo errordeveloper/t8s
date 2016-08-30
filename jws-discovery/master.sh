@@ -11,7 +11,7 @@ version_tag() {
 
 image="errordeveloper/hyperquick:master-$(version_tag)"
 
-token="e44343dcc5f2b6a4a3ff3888bc78506c0085c9b4"
+token="e44343.dcc54f526ab6beef"
 
 nodes=($(docker-machine ls -q | grep hyperquick || true))
 
@@ -45,7 +45,7 @@ docker run --detach \
   --entrypoint=/bin/bash \
     "${image}" \
       -c "
-        kubeadm init --token=\$(cat /etc/kubernetes/bootsrap-token) --listen-ip=10.99.0.254;
+        kubeadm init --token=${token} --listen-ip=10.99.0.254;
       "
 
 docker run --rm --tty --interactive \

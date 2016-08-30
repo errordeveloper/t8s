@@ -10,9 +10,9 @@ conf=($(docker-machine config "hyperquick-${1:-"1"}"))
 
 image="errordeveloper/hyperquick:node-$(version_tag)"
 
-token="e44343dcc5f2b6a4a3ff3888bc78506c0085c9b4"
+token="e44343.dcc54f526ab6beef"
 
-kubeadm="kubeadm join --token=\$(cat /etc/kubernetes/bootsrap-token) --api-server-urls=https://10.99.0.254:443"
+kubeadm="kubeadm join --token=${token} --api-server-urls=https://10.99.0.254:443"
 kubelet="$(docker inspect -f '{{range .Config.Entrypoint}}{{.}} {{end}}' "${image}")"
 
 exec docker "${conf[@]}" run --tty --interactive \
