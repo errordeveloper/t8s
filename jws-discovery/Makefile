@@ -26,7 +26,7 @@ BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 default: images
 
 clean rebuild:
-	$(MAKE) -C .. $@ WHAT="cmd/kubectl cmd/hyperkube cmd/kubeadm cmd/kubediscovery"
+	$(MAKE) -C .. $@ WHAT="cmd/kubectl cmd/hyperkube cmd/kubeadm cmd/kube-discovery"
 
 images: binaries
 	@docker build \
@@ -40,7 +40,7 @@ images: binaries
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "errordeveloper/hyperquick:node" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "hyperquick:node" \
 		&& docker images "hyperquick:node" ;
-	@rm -f hyperkube kubectl kubeadm kubediscovery
+	@rm -f hyperkube kubectl kubeadm kube-discovery
 	@rm -rf cni
 
 binaries:
@@ -48,4 +48,4 @@ binaries:
 	@cp "$(BUILD)/hyperkube" "./"
 	@cp "$(BUILD)/kubectl" "./"
 	@cp "$(BUILD)/kubeadm" "./"
-	@cp "$(BUILD)/kubediscovery" "./"
+	@cp "$(BUILD)/kube-discovery" "./"

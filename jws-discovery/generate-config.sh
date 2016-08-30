@@ -5,7 +5,7 @@ VERSION_TAG="${1}"
 ln -v "/etc/kubernetes/hyperkube" "/hyperkube"
 ln -v "/etc/kubernetes/kubectl" "/usr/bin/kubectl"
 ln -v "/etc/kubernetes/kubeadm" "/usr/bin/kubeadm"
-ln -v "/etc/kubernetes/kubediscovery" "/usr/bin/kube-discovery"
+ln -v "/etc/kubernetes/kube-discovery" "/usr/bin/kube-discovery"
 
 mkdir -vp "/opt/cni" "/etc/cni"
 ln -vs "/etc/kubernetes/cni/bin" "/opt/cni/bin"
