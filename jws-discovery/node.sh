@@ -24,5 +24,7 @@ exec docker "${conf[@]}" run --tty --interactive \
   --volume=/var/run:/var/run:rw \
   --volume=/run:/run:rw \
   --entrypoint=/bin/bash \
+  --env="KUBE_HYPERKUBE_IMAGE=${image}" \
+  --env="KUBE_DISCOVERY_IMAGE=${image}" \
     "${image}" \
       -c "${kubeadm} && ${kubelet}"

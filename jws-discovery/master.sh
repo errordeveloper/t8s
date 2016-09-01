@@ -43,6 +43,8 @@ docker run --detach \
   --net=host \
   --volume=/etc/kubernetes:/etc/kubernetes:rw \
   --entrypoint=/bin/bash \
+  --env="KUBE_HYPERKUBE_IMAGE=${image}" \
+  --env="KUBE_DISCOVERY_IMAGE=${image}" \
     "${image}" \
       -c "
         kubeadm init --token=${token} --listen-ip=10.99.0.254;
