@@ -20,4 +20,4 @@ ADD . /etc/kubernetes
 
 RUN /etc/kubernetes/generate-config.sh $VERSION_TAG
 
-ENTRYPOINT [ "/hyperkube", "kubelet", "--network-plugin=cni", "--network-plugin-dir=/etc/cni/net.d", "--kubeconfig=/etc/kubernetes/kubelet.conf", "--require-kubeconfig=true", "--pod-manifest-path=/etc/kubernetes/manifests" ]
+ENTRYPOINT [ "/hyperkube", "kubelet", "--network-plugin=cni", "--network-plugin-dir=/etc/cni/net.d", "--kubeconfig=/etc/kubernetes/kubelet.conf", "--require-kubeconfig=true", "--pod-manifest-path=/etc/kubernetes/manifests", "--allow-privileged=true" ]
