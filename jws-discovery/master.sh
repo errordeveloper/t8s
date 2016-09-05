@@ -29,9 +29,9 @@ docker run --rm \
   --entrypoint=/bin/bash \
     "${image}" \
       -c "
-        umount -v /var/lib/kubelet;
-        rm -rfv /var/lib/kubelet;
-        mkdir -pv /var/lib/kubelet;
+        nsenter --mount=/proc/1/ns/mnt -- umount -v /var/lib/kubelet;
+        nsenter --mount=/proc/1/ns/mnt -- rm -rfv /var/lib/kubelet;
+        nsenter --mount=/proc/1/ns/mnt -- mkdir -pv /var/lib/kubelet;
         nsenter --mount=/proc/1/ns/mnt -- mount -v --bind /var/lib/kubelet /var/lib/kubelet;
         nsenter --mount=/proc/1/ns/mnt -- mount -v --make-rshared /var/lib/kubelet;
         rm -rfv /host-etc/kubernetes;
@@ -58,13 +58,13 @@ docker run --rm --tty --interactive \
   --volume=/dev:/dev \
   --volume=/sys:/sys:ro \
   --volume=/var/run:/var/run:rw \
+  --volume=/run:/run:rw \
   --volume=/var/lib/kubelet:/var/lib/kubelet:rw,rshared \
   --volume=/etc/kubernetes:/etc/kubernetes:rw \
-  --volume=/run:/run:rw \
   --entrypoint=/bin/bash \
     "${image}" \
       -c "
-        until ${kubelet}; do sleep 1; done;
+        until ${kubelet} --v=3; do sleep 1; done;
       "
 
 docker rm -f kubeadm
