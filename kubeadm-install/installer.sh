@@ -25,12 +25,13 @@ if [ "$#" -gt 0 ] ; then
       echo "Removing all our files!"
       echo
       for i in "${kube_bins[@]}" ; do
-        rm -r -f -v "/target/bin/${i}"
+        rm -f -v "/target/bin/${i}"
       done
-      rm -r -f -v "/target/lib/systemd/system/kubelet.service"
+      rm -f -v "/target/lib/systemd/system/kubelet.service"
       for i in "${cni_bins[@]}" ; do
-        rm -r -f -v "/target/etc/cni/net.d/${i}"
+        rm -f -v "/target/etc/cni/net.d/${i}"
       done
+      rm -f -v "/target/etc/cni/net.d/99_bridge.conf"
       echo
       echo "All our files had been removed, what about yours? :)"
       echo "Jokes aside, you might want to check if you still have any containers to cleanup."
@@ -71,6 +72,8 @@ install -v -m 755 -d "/target/etc/cni/net.d"
 for i in  "${cni_bins[@]}"; do
   install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/cni/${i}"
 done
+
+install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/cni/99_bridge.conf"
 
 
 echo
