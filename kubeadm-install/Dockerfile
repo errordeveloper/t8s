@@ -20,6 +20,11 @@ ENV KUBERNETES_BUILD_VERSION=${VERSION_TAG}
 ADD . /opt/kube-${VERSION_TAG}
 WORKDIR /opt/kube-${VERSION_TAG}
 
-RUN apk update && apk add bash && ln /opt/kube-${VERSION_TAG}/installer.sh /usr/bin/kube-installer
+
+# As a basic way to verify we have all the files, we simulate installer run during the build
+# (we seem to need sync here, otherwise we get "Text file busy" for some reason)
+RUN apk update && apk add bash \
+  && ln /opt/kube-${VERSION_TAG}/installer.sh /usr/bin/kube-installer \
+  && sync && mkdir /target && /usr/bin/kube-installer && rm -rf /target
 
 ENTRYPOINT [ "/usr/bin/kube-installer" ]

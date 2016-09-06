@@ -21,20 +21,48 @@ cni_bins=(
 
 if [ "$#" -gt 0 ] ; then
   case "$1" in
+    help)
+      echo "You are looking at this because you probably want to learn how to revert what has been done."
+      echo
+      echo "You first want to stop disable and stop kubelet like this:"
+      echo
+      echo "> sudo systemctl disable kubelet && sudo systemctl stop kubelet"
+      echo
+      echo "Next, you can run this to remove all local containers owned by Kubernetes:"
+      echo
+      echo "> sudo docker rm --force --volumes \$(sudo docker ps --filter label=io.kubernetes.pod.name --all --quiet)"
+      echo
+      echo "And now you should remove files created by kubeadm simply like this:"
+      echo
+      echo "> sudo rm -rf /etc/kubernetes"
+      echo
+      echo "Finally you can uninstall the binaries and configuration files we have installed with this command:"
+      echo
+      echo "> sudo docker run -v /usr/local:/target errordeveloper/kube-installer uninstall"
+      echo
+      echo "If you aren't happy, read the code. Anyhow, good luck!"
+      exit
+    ;;
     uninstall|remove|cleanup)
-      echo "Removing all our files!"
+      echo "Uninstalling..."
       echo
       for i in "${kube_bins[@]}" ; do
         rm -f -v "/target/bin/${i}"
       done
       rm -f -v "/target/lib/systemd/system/kubelet.service"
       for i in "${cni_bins[@]}" ; do
-        rm -f -v "/target/etc/cni/net.d/${i}"
+        rm -f -v "/target/lib/cni/bin/${i}"
       done
       rm -f -v "/target/etc/cni/net.d/99_bridge.conf"
       echo
-      echo "All our files had been removed, what about yours? :)"
-      echo "Jokes aside, you might want to check if you still have any containers to cleanup."
+      echo "Hope you enjoyed, and see you later!"
+      exit
+      ;;
+    install)
+      break
+      ;;
+    *)
+      echo "Usage: sudo docker run -v /usr/local:/target errordeveloper/kube-installer [install|help|uninstall]"
       exit
       ;;
   esac
@@ -43,7 +71,7 @@ fi
 if ! [ -d "/target" ] ; then
   echo "Please make sure to specify target install direcory, e.g.:"
   echo
-  echo "> docker run -v /usr/local:/target errordeveloper/kube-installer"
+  echo "> sudo docker run -v /usr/local:/target errordeveloper/kube-installer"
   echo
   echo "Don't give up!"
   exit 1
@@ -67,14 +95,14 @@ echo
 echo "Installing generic CNI plugins and configuration..."
 echo
 
+install -v -m 755 -d "/target/lib/cni/bin"
 install -v -m 755 -d "/target/etc/cni/net.d"
 
 for i in  "${cni_bins[@]}"; do
-  install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/cni/${i}"
+  install -v -p -m  755 -t "/target/lib/cni/bin" "${dir}/cni/${i}"
 done
 
-install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/cni/99_bridge.conf"
-
+install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/99_bridge.conf"
 
 echo
 echo "Binaries and configuration files had been installed, you can now start kubelet and run kubeadm."
@@ -90,3 +118,4 @@ echo
 echo "> sudo kubeadm join --token=<...> <master-ip-address>"
 echo
 echo "Have fun, and enjoy!"
+exit

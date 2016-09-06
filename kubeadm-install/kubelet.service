@@ -6,7 +6,10 @@ Documentation=http://kubernetes.io/docs/
 Environment="KUBELET_KUBECONFIG_ARGS=--kubeconfig=/etc/kubernetes/kubelet.conf --require-kubeconfig=true"
 Environment="KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true"
 Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --network-plugin-dir=/usr/local/etc/cni/net.d"
+ExecStartPre=-/bin/mkdir --verbose --parents /opt/cni
+ExecStartPre=-/bin/mount --verbose --bind /usr/local/lib/cni /opt/cni
 ExecStart=/usr/local/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS
+ExecStopPost=-/bin/umount --verbose /opt/cni
 Restart=always
 StartLimitInterval=0
 RestartSec=10
