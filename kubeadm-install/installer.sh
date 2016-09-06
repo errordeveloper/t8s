@@ -59,7 +59,6 @@ if [ "$#" -gt 0 ] ; then
       exit
       ;;
     install)
-      break
       ;;
     *)
       echo "Usage: sudo docker run -v /usr/local:/target errordeveloper/kube-installer [install|help|uninstall]"
