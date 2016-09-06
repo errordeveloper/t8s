@@ -16,7 +16,8 @@
 
 KUBE_ROOT := ../../
 
-VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git rev-parse --short @)
+KUBE_VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git rev-parse --short @)
+TAG := "$(shell git rev-parse --short @)-$(KUBE_VERSION_TAG)"
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
@@ -30,18 +31,20 @@ clean rebuild:
 
 images: binaries
 	@docker build \
-	  --build-arg="VERSION_TAG=$(VERSION_TAG)" \
-	  --tag="errordeveloper/kube-installer:$(VERSION_TAG)" "./"
+	  --build-arg="VERSION_TAG=$(KUBE_VERSION_TAG)" \
+	  --tag="errordeveloper/kube-installer:$(TAG)" "./"
 	@echo "Tagging latest image" \
-	  && docker tag "errordeveloper/kube-installer:$(VERSION_TAG)" "errordeveloper/kube-installer:latest" \
+	  && docker tag "errordeveloper/kube-installer:$(TAG)" "errordeveloper/kube-installer:latest" \
 		&& docker images "errordeveloper/kube-installer:latest" ;
 	@rm -f kubelet kubeadm kubectl
+	@rm -rf cni
 
 publish:
-	@docker push "errordeveloper/kube-installer:$(VERSION_TAG)"
+	@docker push "errordeveloper/kube-installer:$(TAG)"
 	@docker push "errordeveloper/kube-installer:latest"
 
 binaries:
 	@cp "$(BUILD)/kubelet" "./"
 	@cp "$(BUILD)/kubeadm" "./"
 	@cp "$(BUILD)/kubectl" "./"
+	@cp -r "../cni/bin" "./cni"

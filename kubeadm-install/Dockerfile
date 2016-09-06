@@ -20,6 +20,6 @@ ENV KUBERNETES_BUILD_VERSION=${VERSION_TAG}
 ADD . /opt/kube-${VERSION_TAG}
 WORKDIR /opt/kube-${VERSION_TAG}
 
-RUN ln /opt/kube-${VERSION_TAG}/installer.sh /usr/bin/kube-installer
+RUN apk update && apk add bash && ln /opt/kube-${VERSION_TAG}/installer.sh /usr/bin/kube-installer
 
 ENTRYPOINT [ "/usr/bin/kube-installer" ]
