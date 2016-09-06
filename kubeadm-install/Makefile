@@ -39,7 +39,7 @@ images: binaries
 	@rm -f kubelet kubeadm kubectl
 	@rm -rf cni
 
-publish:
+publish: images
 	@docker push "errordeveloper/kube-installer:$(TAG)"
 	@docker push "errordeveloper/kube-installer:latest"
 
