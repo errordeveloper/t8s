@@ -8,8 +8,11 @@ Environment="KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manife
 Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --network-plugin-dir=/usr/local/etc/cni/net.d"
 ExecStartPre=-/bin/mkdir --verbose --parents /opt/cni
 ExecStartPre=-/bin/mount --verbose --bind /usr/local/lib/cni /opt/cni
+ExecStartPre=-/bin/mkdir --verbose --parents /etc/cni
+ExecStartPre=-/bin/mount --verbose --bind /usr/local/etc/cni /etc/cni
 ExecStart=/usr/local/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS
 ExecStopPost=-/bin/umount --verbose /opt/cni
+ExecStopPost=-/bin/umount --verbose /etc/cni
 Restart=always
 StartLimitInterval=0
 RestartSec=10
