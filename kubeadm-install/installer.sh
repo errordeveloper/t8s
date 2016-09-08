@@ -53,7 +53,6 @@ if [ "$#" -gt 0 ] ; then
       for i in "${cni_bins[@]}" ; do
         rm -f -v "/target/lib/cni/bin/${i}"
       done
-      rm -f -v "/target/etc/cni/net.d/99_bridge.conf"
       echo
       echo "Hope you enjoyed, and see you later!"
       exit
@@ -101,7 +100,6 @@ for i in  "${cni_bins[@]}"; do
   install -v -p -m  755 -t "/target/lib/cni/bin" "${dir}/cni/${i}"
 done
 
-install -v -p -m  755 -t "/target/etc/cni/net.d" "${dir}/99_bridge.conf"
 
 echo
 echo "Binaries and configuration files had been installed, you can now start kubelet and run kubeadm."
