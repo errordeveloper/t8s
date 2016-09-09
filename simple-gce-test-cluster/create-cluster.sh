@@ -44,14 +44,14 @@ common_instace_flags=(
   --image-family centos-7
   --image-project centos-cloud
   --metadata-from-file startup-script=provision.sh
-  --boot-disk-type pd-standard
+  --boot-disk-type pd-ssd
+  --machine-type n1-standard-8
+  --can-ip-forward
 )
 
 gcloud compute instances create 'kube-master-0' \
   "${common_instace_flags[@]}" \
   --tags 'kube-int,kube-ext' \
-  --boot-disk-size '10GB' \
-  --can-ip-forward \
   --scopes 'storage-ro,compute-rw,monitoring,logging-write'
 
 gcloud compute instance-groups unmanaged add-instances 'kube-master-group' \
@@ -60,8 +60,6 @@ gcloud compute instance-groups unmanaged add-instances 'kube-master-group' \
 gcloud compute instance-templates create 'kube-node-template' \
   "${common_instace_flags[@]}" \
   --tags 'kube-int,kube-ext,kube-node' \
-  --boot-disk-size '30GB' \
-  --can-ip-forward \
   --scopes 'storage-ro,compute-rw,monitoring,logging-write'
 
 gcloud compute instance-groups managed create 'kube-node-group' \
