@@ -20,6 +20,8 @@ VERSION_TAG := $(shell git --git-dir $(KUBE_ROOT)/.git describe)
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
+IMAGE := "gcr.io/kubeadm/hyperkube"
+
 
 .PHONY: binaries images clean rebuild
 
@@ -31,17 +33,22 @@ clean rebuild:
 images: binaries
 	@docker build \
 	  --build-arg="VERSION_TAG=$(VERSION_TAG)" \
-	  --tag="errordeveloper/hyperquick:node-$(VERSION_TAG)" "./"
+	  --tag="$(IMAGE):$(VERSION_TAG)" "./"
 	@echo "Tagging latest image" \
-	  && docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "errordeveloper/hyperquick:master-$(VERSION_TAG)" \
+		&& docker tag "$(IMAGE):$(VERSION_TAG)" "$(IMAGE):latest" \
+		&& docker tag "$(IMAGE):$(VERSION_TAG)" "errordeveloper/hyperquick:master-$(VERSION_TAG)" \
+		&& docker tag "$(IMAGE):$(VERSION_TAG)" "errordeveloper/hyperquick:node-$(VERSION_TAG)" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "errordeveloper/hyperquick:master" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "hyperquick:master" \
-		&& docker images "hyperquick:master" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "errordeveloper/hyperquick:node" \
 		&& docker tag "errordeveloper/hyperquick:node-$(VERSION_TAG)" "hyperquick:node" \
-		&& docker images "hyperquick:node" ;
+		&& docker images "$(IMAGE)" ;
 	@rm -f hyperkube kubectl kubeadm kube-discovery
 	@rm -rf cni
+
+publish: images
+	@gcloud docker push "$(IMAGE):$(VERSION_TAG)"
+	@gcloud docker push "$(IMAGE):latest"
 
 binaries:
 	@cp -a "../cni" "./"

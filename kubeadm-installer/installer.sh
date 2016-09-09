@@ -38,7 +38,7 @@ if [ "$#" -gt 0 ] ; then
       echo
       echo "Finally you can uninstall the binaries and configuration files we have installed with this command:"
       echo
-      echo "> sudo docker run -v /usr/local:/target errordeveloper/kube-installer uninstall"
+      echo "> sudo docker run -v /usr/local:/target gcr.io/kubeadm/installer uninstall"
       echo
       echo "If you aren't happy, read the code. Anyhow, good luck!"
       exit
@@ -60,7 +60,7 @@ if [ "$#" -gt 0 ] ; then
     install)
       ;;
     *)
-      echo "Usage: sudo docker run -v /usr/local:/target errordeveloper/kube-installer [install|help|uninstall]"
+      echo "Usage: sudo docker run -v /usr/local:/target gcr.io/kubeadm/installer [install|help|uninstall]"
       exit
       ;;
   esac
@@ -69,7 +69,7 @@ fi
 if ! [ -d "/target" ] ; then
   echo "Please make sure to specify target install direcory, e.g.:"
   echo
-  echo "> sudo docker run -v /usr/local:/target errordeveloper/kube-installer"
+  echo "> sudo docker run -v /usr/local:/target gcr.io/kubeadm/installer"
   echo
   echo "Don't give up!"
   exit 1
@@ -108,7 +108,7 @@ echo "> sudo systemctl daemon-reload && sudo systemctl enable kubelet && sudo sy
 echo
 echo "If this host is going to be the master, run:"
 echo
-echo "> sudo kubeadm init"
+echo "> sudo env KUBE_HYPERKUBE_IMAGE=gcr.io/kubeadm/hyperkube:latest KUBE_DISCOVERY_IMAGE=gcr.io/kubeadm/hyperkube:latest kubeadm init --use-hyperkube"
 echo
 echo "If it's going to be a node, run:"
 echo

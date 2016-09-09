@@ -21,6 +21,7 @@ TAG := "$(shell git rev-parse --short @)-$(KUBE_VERSION_TAG)"
 
 BUILD := "$(KUBE_ROOT)/_output/dockerized/bin/linux/amd64"
 
+IMAGE := "gcr.io/kubeadm/installer"
 
 .PHONY: binaries images clean rebuild
 
@@ -32,16 +33,16 @@ clean rebuild:
 images: binaries
 	@docker build \
 	  --build-arg="VERSION_TAG=$(KUBE_VERSION_TAG)" \
-	  --tag="errordeveloper/kube-installer:$(TAG)" "./"
+	  --tag="$(IMAGE):$(TAG)" "./"
 	@echo "Tagging latest image" \
-	  && docker tag "errordeveloper/kube-installer:$(TAG)" "errordeveloper/kube-installer:latest" \
-		&& docker images "errordeveloper/kube-installer:latest" ;
+	  && docker tag "$(IMAGE):$(TAG)" "$(IMAGE):latest" \
+		&& docker images "$(IMAGE)" ;
 	@rm -f kubelet kubeadm kubectl
 	@rm -rf cni
 
 publish: images
-	@docker push "errordeveloper/kube-installer:$(TAG)"
-	@docker push "errordeveloper/kube-installer:latest"
+	@gcloud docker push "$(IMAGE):$(TAG)"
+	@gcloud docker push "$(IMAGE):latest"
 
 binaries:
 	@cp "$(BUILD)/kubelet" "./"

@@ -33,7 +33,8 @@ fi
 
 /usr/bin/weave version
 
-docker pull docker.io/errordeveloper/kubeadm-installer
+docker pull gcr.io/kubeadm/installer
+docker pull gcr.io/kubeadm/hyperkube
 
 case "$(hostname)" in
   kube-master-0)
