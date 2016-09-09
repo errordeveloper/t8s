@@ -14,13 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if ! /usr/bin/docker -v 2> /dev/null | grep -q "^Docker\ version\ 1\.11" ; then
-  echo "Installing current version of Docker Engine 1.11"
-  curl --silent --location  https://get.docker.com/builds/Linux/x86_64/docker-1.11.3  --output /usr/bin/docker
-  chmod +x /usr/bin/docker
-fi
+yum -q -y update
 
-systemd-run --unit=docker.service /usr/bin/docker daemon
+curl -fsSL https://get.docker.com/ | sh
+
+#yum -q -y install docker
+
+systemctl start docker
 
 /usr/bin/docker version
 

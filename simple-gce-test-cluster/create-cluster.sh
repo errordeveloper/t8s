@@ -26,14 +26,14 @@ gcloud compute firewall-rules create 'kube-extfw' \
 gcloud compute firewall-rules create 'kube-intfw' \
   --network 'kube-net' \
   --allow 'tcp:443,tcp:9898,tcp:6783,udp:6783-6784' \
-  --source-tag 'kube-int' \
+  --source-tags 'kube-int' \
   --target-tags 'kube-int' \
   --description 'Internal access for the API & Weave Net ports'
 
 gcloud compute firewall-rules create 'kube-nodefw' \
   --network 'kube-net' \
   --allow 'tcp,udp,icmp,esp,ah,sctp' \
-  --source-tag 'kube-node' \
+  --source-tags 'kube-node' \
   --target-tags 'kube-node' \
   --description 'Internal access to all ports on the nodes'
 
@@ -41,7 +41,8 @@ gcloud compute instance-groups unmanaged create 'kube-master-group'
 
 common_instace_flags=(
   --network kube-net
-  --image centos-7
+  --image-family centos-7
+  --image-project centos-cloud
   --metadata-from-file startup-script=provision.sh
   --boot-disk-type pd-standard
 )
