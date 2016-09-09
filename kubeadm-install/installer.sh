@@ -112,7 +112,7 @@ echo "> sudo kubeadm init"
 echo
 echo "If it's going to be a node, run:"
 echo
-echo "> sudo kubeadm join --token=<...> <master-ip-address>"
+echo "> sudo kubeadm join --token=<...> --api-server-urls <master-ip-address>"
 echo
 echo "Have fun, and enjoy!"
 exit
