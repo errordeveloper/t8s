@@ -108,7 +108,7 @@ echo "> sudo systemctl daemon-reload && sudo systemctl enable kubelet && sudo sy
 echo
 echo "If this host is going to be the master, run:"
 echo
-echo "> sudo env KUBE_HYPERKUBE_IMAGE=gcr.io/kubeadm/hyperkube:latest KUBE_DISCOVERY_IMAGE=gcr.io/kubeadm/hyperkube:latest kubeadm init --use-hyperkube"
+echo "> sudo env KUBE_HYPERKUBE_IMAGE=gcr.io/kubeadm/hyperkube:latest KUBE_DISCOVERY_IMAGE=gcr.io/kubeadm/hyperkube:latest kubeadm init"
 echo
 echo "If it's going to be a node, run:"
 echo
